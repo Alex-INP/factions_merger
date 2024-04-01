@@ -16,7 +16,7 @@ type FilesManager struct {
 	affinityFilePath string
 }
 
-func getFileManager() FilesManager {
+func getFilesManager() FilesManager {
 	var cwd, err = os.Getwd()
 	if err != nil {
 		fmt.Println(err)

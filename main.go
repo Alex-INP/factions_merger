@@ -17,14 +17,14 @@ const AFFINITY_DELIMITER_A = "--A--"
 const AFFINITY_DELIMITER_B = "--B--"
 
 func main() {
-	var fileManager = getFileManager()
-	fileManager.setupFilesAndFolders()
+	var filesManager = getFilesManager()
+	filesManager.setupFilesAndFolders()
 
-	var parserA = parseDataFromFile(fileManager.filePathA)
-	var parserB = parseDataFromFile(fileManager.filePathB)
-	mergedMap := mergeFactions(parserA, parserB, fileManager)
+	var parserA = parseDataFromFile(filesManager.filePathA)
+	var parserB = parseDataFromFile(filesManager.filePathB)
+	mergedMap := mergeFactions(parserA, parserB, filesManager)
 
-	file, err := os.Create(fileManager.resultFilePath)
+	file, err := os.Create(filesManager.resultFilePath)
 	if err != nil {
 		fmt.Println(err)
 		pressEnterAndExit()
@@ -35,6 +35,7 @@ func main() {
 		file.WriteString(factionData)
 	}
 
+	fmt.Println("Мердж успешно завершен")
 	pressEnterAndExit()
 }
 
