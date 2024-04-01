@@ -19,3 +19,8 @@
 
 # Go workspace file
 go.work
+
+merge_a/
+merge_b/
+result/
+affinity.txt
