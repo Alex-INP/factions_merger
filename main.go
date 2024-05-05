@@ -95,6 +95,7 @@ func addAffiliateData(affinityData []string, parsedData map[string]string, resul
 		for _, n := range affinityData {
 			if strings.Contains(factionName, n) {
 				result[factionName] = factionData
+				continue
 			}
 		}
 	}
