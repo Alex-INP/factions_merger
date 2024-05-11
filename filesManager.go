@@ -24,9 +24,9 @@ func getFilesManager() FilesManager {
 	}
 
 	var result FilesManager = FilesManager{
-		filepath.Join(cwd, MERGE_FILE_A_PATH),
-		filepath.Join(cwd, MERGE_FILE_B_PATH),
-		filepath.Join(cwd, RESULT_FILE_PATH),
+		filepath.Join(cwd, MERGE_FILE_A_DIR),
+		filepath.Join(cwd, MERGE_FILE_B_DIR),
+		filepath.Join(cwd, RESULT_FILE_DIR),
 		"",
 		"",
 		"",

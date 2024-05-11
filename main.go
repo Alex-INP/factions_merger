@@ -9,9 +9,9 @@ import (
 
 const MERGE_FILE_NAME = "user_empire_designs_v3.4.txt"
 const AFFINITY_FILE_NAME = "affinity.txt"
-const MERGE_FILE_A_PATH = "merge_a"
-const MERGE_FILE_B_PATH = "merge_b"
-const RESULT_FILE_PATH = "result"
+const MERGE_FILE_A_DIR = "merge_a"
+const MERGE_FILE_B_DIR = "merge_b"
+const RESULT_FILE_DIR = "result"
 
 const AFFINITY_DELIMITER_A = "--A--"
 const AFFINITY_DELIMITER_B = "--B--"
@@ -22,18 +22,14 @@ func main() {
 
 	var parserA = parseDataFromFile(filesManager.filePathA)
 	var parserB = parseDataFromFile(filesManager.filePathB)
-	mergedMap := mergeFactions(parserA, parserB, filesManager)
+	affinityDataA, affinityDataB := getAffinityData(filesManager)
+	
+	resultA := make(map[string]string)
+	resultB := make(map[string]string)
+	addAffiliateData(affinityDataA, parserA.json_data, resultA)
+	addAffiliateData(affinityDataB, parserB.json_data, resultB)
 
-	file, err := os.Create(filesManager.resultFilePath)
-	if err != nil {
-		fmt.Println(err)
-		pressEnterAndExit()
-	}
-	defer file.Close()
-	for factionName, factionData := range mergedMap {
-		file.WriteString(factionName)
-		file.WriteString(factionData)
-	}
+	writeResultFile([2]map[string]string{resultA, resultB}, filesManager)
 
 	fmt.Println("Мердж успешно завершен")
 	pressEnterAndExit()
@@ -51,7 +47,7 @@ func parseDataFromFile(filePath string) Parser {
 	return parser
 }
 
-func mergeFactions(parserA Parser, parserB Parser, filesManager FilesManager) map[string]string {
+func getAffinityData(filesManager FilesManager) ([]string, []string) {
 	file, err := os.OpenFile(filesManager.affinityFilePath, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		fmt.Println(err)
@@ -82,13 +78,8 @@ func mergeFactions(parserA Parser, parserB Parser, filesManager FilesManager) ma
 			}
 		}
 	}
-
-	result := make(map[string]string)
-	addAffiliateData(affinityDataA, parserA.json_data, result)
-	addAffiliateData(affinityDataB, parserB.json_data, result)
-
-	return result
-}
+	return affinityDataA, affinityDataB
+} 
 
 func addAffiliateData(affinityData []string, parsedData map[string]string, result map[string]string) {
 	for factionName, factionData := range parsedData {
@@ -101,9 +92,24 @@ func addAffiliateData(affinityData []string, parsedData map[string]string, resul
 	}
 }
 
+func writeResultFile(resultData [2]map[string]string, filesManager FilesManager) {
+	file, err := os.Create(filesManager.resultFilePath)
+	if err != nil {
+		fmt.Println(err)
+		pressEnterAndExit()
+	}
+	defer file.Close()
+	for _, item := range resultData {
+		for factionName, factionData := range item {
+			file.WriteString(factionName)
+			file.WriteString(factionData)
+		}
+	}
+}
+
 func pressEnterAndExit() {
 	fmt.Println()
-	fmt.Println("Press Enter to exit")
+	fmt.Println("Нажмите Enter чтобы выйти")
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	os.Exit(0)
