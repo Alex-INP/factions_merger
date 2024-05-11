@@ -22,10 +22,10 @@ func main() {
 
 	var parserA = parseDataFromFile(filesManager.filePathA)
 	var parserB = parseDataFromFile(filesManager.filePathB)
-	affinityDataA, affinityDataB := getAffinityData(filesManager)
-	
+
 	resultA := make(map[string]string)
 	resultB := make(map[string]string)
+	affinityDataA, affinityDataB := getAffinityData(filesManager)
 	addAffiliateData(affinityDataA, parserA.json_data, resultA)
 	addAffiliateData(affinityDataB, parserB.json_data, resultB)
 
