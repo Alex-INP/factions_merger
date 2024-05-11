@@ -37,10 +37,7 @@ func main() {
 
 func parseDataFromFile(filePath string) Parser {
 	raw_data, err := os.ReadFile(filePath)
-	if err != nil {
-		fmt.Println(err)
-		pressEnterAndExit()
-	}
+	handleErrorIfAny(err)
 	var parser Parser = GetParser(string(raw_data))
 	parser.parseData()
 
@@ -49,10 +46,7 @@ func parseDataFromFile(filePath string) Parser {
 
 func getAffinityData(filesManager FilesManager) ([]string, []string) {
 	file, err := os.OpenFile(filesManager.affinityFilePath, os.O_RDONLY, os.ModePerm)
-	if err != nil {
-		fmt.Println(err)
-		pressEnterAndExit()
-	}
+	handleErrorIfAny(err)
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
@@ -94,16 +88,21 @@ func addAffiliateData(affinityData []string, parsedData map[string]string, resul
 
 func writeResultFile(resultData [2]map[string]string, filesManager FilesManager) {
 	file, err := os.Create(filesManager.resultFilePath)
-	if err != nil {
-		fmt.Println(err)
-		pressEnterAndExit()
-	}
+	handleErrorIfAny(err)
+
 	defer file.Close()
 	for _, item := range resultData {
 		for factionName, factionData := range item {
 			file.WriteString(factionName)
 			file.WriteString(factionData)
 		}
+	}
+}
+
+func handleErrorIfAny(err error){
+	if err != nil {
+		fmt.Println(err)
+		pressEnterAndExit()
 	}
 }
 

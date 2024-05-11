@@ -18,10 +18,7 @@ type FilesManager struct {
 
 func getFilesManager() FilesManager {
 	var cwd, err = os.Getwd()
-	if err != nil {
-		fmt.Println(err)
-		pressEnterAndExit()
-	}
+	handleErrorIfAny(err)
 
 	var result FilesManager = FilesManager{
 		filepath.Join(cwd, MERGE_FILE_A_DIR),
@@ -45,10 +42,7 @@ func (fm *FilesManager) setupFilesAndFolders() {
 	_, err := os.Stat(fm.affinityFilePath)
 	if os.IsNotExist(err) {
 		file, err := os.Create(fm.affinityFilePath)
-		if err != nil {
-			fmt.Println(err)
-			pressEnterAndExit()
-		}
+		handleErrorIfAny(err)
 		defer file.Close()
 		file.WriteString(fmt.Sprintf("%s\n\n%s", AFFINITY_DELIMITER_A, AFFINITY_DELIMITER_B))
 
@@ -59,10 +53,7 @@ func (fm *FilesManager) setupFilesAndFolders() {
 		_, err := os.Stat(folderPath)
 		if os.IsNotExist(err) {
 			err = os.Mkdir(folderPath, os.ModePerm)
-			if err != nil {
-				fmt.Println(err)
-				pressEnterAndExit()
-			}
+			handleErrorIfAny(err)
 			createdAny = true
 		}
 	}
